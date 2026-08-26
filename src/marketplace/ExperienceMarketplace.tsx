@@ -1868,7 +1868,62 @@ export default function ExperienceMarketplace() {
   )
 }
 
+function isExperience(listing: Experience | ItineraryPath): listing is Experience {
+  return 'category' in listing
+}
+
+type FactRow = { label: string; value: string; strong?: boolean }
+
+function buildFacts(listing: Experience | ItineraryPath): FactRow[] {
+  if (isExperience(listing)) {
+    const text = `${listing.tags.join(' ')} ${listing.summary}`.toLowerCase()
+    const permitTags = listing.tags.filter((tag) => /park fee|permit|waiver|guide required|protocol|restricted|licen|only|access/i.test(tag))
+
+    return [
+      { label: 'Budget tier', value: listing.price, strong: true },
+      { label: 'Trip duration', value: listing.duration, strong: true },
+      { label: 'Difficulty / fitness', value: listing.difficulty, strong: true },
+      { label: 'Group size', value: `${listing.group} people`, strong: true },
+      { label: 'Best season', value: listing.season },
+      { label: '4x4 needed', value: /4x4/.test(text) ? 'Yes — 4x4 vehicle required' : 'No — normal vehicle is fine' },
+      { label: 'Permit info', value: permitTags.length ? permitTags.join(' · ') : 'No special permit or fee listed' },
+      {
+        label: 'Can you self-explore?',
+        value:
+          listing.selfExplore === 'Zero'
+            ? 'Yes — go on your own, no guide needed'
+            : listing.selfExplore === 'Guided optional'
+              ? 'Partly — a guide is optional but helpful'
+              : 'No — a licensed guide or operator is required',
+      },
+      {
+        label: 'Offline friendly',
+        value: /remote|camp|4x4|expedition/.test(text)
+          ? 'Low signal — download maps and save contacts first'
+          : 'Usually good signal — but save contacts anyway',
+      },
+    ]
+  }
+
+  const meta = pathCategories.find((item) => item.key === listing.pathCategory)
+  const text = listing.meta.toLowerCase()
+
+  return [
+    { label: 'Path type', value: meta?.label ?? 'Itinerary path', strong: true },
+    { label: 'Trip duration', value: `${listing.days} days`, strong: true },
+    { label: 'Difficulty / fitness', value: listing.intensity, strong: true },
+    { label: 'Province', value: listing.province, strong: true },
+    { label: 'Stops on this path', value: `${listing.steps.length} stops` },
+    { label: '4x4 needed', value: /4x4|sand|convoy/.test(text) ? 'Yes — 4x4 vehicle required' : 'No — normal vehicle is fine' },
+    { label: 'Permit info', value: /park fee|permit|waiver|restricted|protocol/.test(text) ? 'Park fees or permits apply — confirm at booking' : 'No special permit listed' },
+    { label: 'Booking note', value: listing.meta },
+  ]
+}
+
 function ContactModal({ listing, onClose }: { listing: Experience | ItineraryPath; onClose: () => void }) {
+  const facts = buildFacts(listing)
+  const tags = isExperience(listing) ? listing.tags : []
+
   return (
     <div className="fixed inset-0 z-[80] overflow-y-auto bg-black/70 px-4 py-6 backdrop-blur-sm">
       <div className="mx-auto max-w-4xl border border-white/10 bg-white text-zinc-950 shadow-2xl">
@@ -1882,7 +1937,7 @@ function ContactModal({ listing, onClose }: { listing: Experience | ItineraryPat
           </button>
         </div>
 
-        <div className="grid gap-5 p-5 lg:grid-cols-[1fr_280px]">
+        <div className="grid gap-5 p-5 lg:grid-cols-[1fr_340px]">
           <div className="grid gap-3">
             {listing.providers.map((provider) => (
               <article key={provider.name} className="border border-zinc-200 p-4">
@@ -1911,32 +1966,46 @@ function ContactModal({ listing, onClose }: { listing: Experience | ItineraryPat
             ))}
           </div>
 
-          <form className="border-2 border-[#ff8200] bg-[#fff7ed] p-4">
-            <p className="text-sm font-black">Quick reservation request</p>
-            <label className="mt-4 block text-xs font-black uppercase tracking-[0.12em] text-zinc-500">
-              Name
-              <input className="mt-2 h-11 w-full border border-zinc-300 bg-white px-3 text-sm font-bold outline-none" placeholder="Traveler name" />
-            </label>
-            <label className="mt-3 block text-xs font-black uppercase tracking-[0.12em] text-zinc-500">
-              Travel date
-              <input type="date" className="mt-2 h-11 w-full border border-zinc-300 bg-white px-3 text-sm font-bold outline-none" />
-            </label>
-            <label className="mt-3 block text-xs font-black uppercase tracking-[0.12em] text-zinc-500">
-              Group size
-              <input type="number" min="1" className="mt-2 h-11 w-full border border-zinc-300 bg-white px-3 text-sm font-bold outline-none" placeholder="2" />
-            </label>
-            <label className="mt-3 block text-xs font-black uppercase tracking-[0.12em] text-zinc-500">
-              Message
-              <textarea className="mt-2 min-h-24 w-full border border-zinc-300 bg-white px-3 py-3 text-sm font-bold outline-none" placeholder="Tell the provider what you need." />
-            </label>
-            <button type="button" className="mt-4 w-full bg-zinc-950 px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-white">
-              Prepare request
-            </button>
-            <a href="mailto:providers@experiencezambia.example?subject=List%20my%20tourism%20agency" className="mt-3 flex items-center justify-center gap-2 border border-zinc-300 bg-white px-4 py-3 text-center text-xs font-black uppercase tracking-[0.12em] text-zinc-950">
+          <aside className="space-y-4">
+            <div className="border-2 border-[#ff8200] bg-white p-4 shadow-[8px_8px_0_#050505]">
+              <p className="text-sm font-black">Practical filters</p>
+              <p className="mt-2 text-xs font-semibold leading-5 text-zinc-500">
+                These decide whether this experience is realistic to book today.
+              </p>
+
+              <dl className="mt-4 grid gap-2">
+                {facts.map((fact) => (
+                  <div key={fact.label} className="border border-zinc-200 bg-[#fff7ed] px-3 py-2">
+                    <dt className="text-[11px] font-black uppercase tracking-[0.1em] text-zinc-500">{fact.label}</dt>
+                    <dd className={`mt-1 leading-5 text-zinc-900 ${fact.strong ? 'text-base font-black' : 'text-sm font-bold'}`}>
+                      {fact.value}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+
+              {tags.length > 0 && (
+                <div className="mt-4 border-t border-zinc-200 pt-4">
+                  <p className="text-[11px] font-black uppercase tracking-[0.1em] text-zinc-500">Good to know</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                      <span key={tag} className="border border-zinc-300 bg-white px-2 py-1 text-xs font-bold text-zinc-700">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <a
+              href="mailto:providers@experiencezambia.example?subject=List%20my%20tourism%20agency"
+              className="flex items-center justify-center gap-2 border border-zinc-300 bg-white px-4 py-3 text-center text-xs font-black uppercase tracking-[0.12em] text-zinc-950 hover:border-[#ff8200]"
+            >
               List tourism agency
               <ExternalLink className="h-4 w-4" />
             </a>
-          </form>
+          </aside>
         </div>
       </div>
     </div>

@@ -10,11 +10,11 @@ export default function Footer() {
           </span>
           <div>
             <p className="text-sm font-black uppercase tracking-[0.18em]">Experience Zambia</p>
-            <p className="text-xs font-semibold text-white/45">National discovery, province-ready booking.</p>
+            <p className="text-xs font-semibold text-white/45">Discover the best of Zambia with our always-ready booking.</p>
           </div>
         </div>
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-white/35">
-          Marketplace concept · Green · Red · Black · Orange
+          Visit · Travel · Experience · Remember
         </p>
       </div>
     </footer>

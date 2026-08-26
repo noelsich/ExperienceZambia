@@ -1,0 +1,48 @@
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+(node:3144) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///C:/Users/Sich/Documents/Experence%20Zambia/postcss.config.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to C:\Users\Sich\Documents\Experence Zambia\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[2m17:12:35[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "../ui/Footer" from "src/marketplace/ExperienceMarketplace.tsx". Does the file exist?
+[2m17:12:42[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../ui/Footer" from "src/marketplace/ExperienceMarketplace.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sich/Documents/Experence Zambia/src/marketplace/ExperienceMarketplace.tsx[39m:24:19
+[33m  39 |    X
+  40 |  } from "lucide-react";
+  41 |  import Footer from "../ui/Footer";
+     |                      ^
+  42 |  import Navbar from "../ui/Navbar";
+  43 |  const categories = [[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 5)
+      at async TransformPluginContext.transform (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m17:13:06[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "../ui/Footer" from "src/marketplace/ExperienceMarketplace.tsx". Does the file exist?
+[2m17:13:06[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./useScrolled" from "src/ui/Navbar.tsx". Does the file exist?
+[2m17:13:07[22m [31m[1m[vite][22m[39m [31mInternal server error: Failed to resolve import "../ui/Footer" from "src/marketplace/ExperienceMarketplace.tsx". Does the file exist?[39m
+  Plugin: [35mvite:import-analysis[39m
+  File: [36mC:/Users/Sich/Documents/Experence Zambia/src/marketplace/ExperienceMarketplace.tsx[39m:24:19
+[33m  39 |    X
+  40 |  } from "lucide-react";
+  41 |  import Footer from "../ui/Footer";
+     |                      ^
+  42 |  import Navbar from "../ui/Navbar";
+  43 |  const categories = [[39m
+      at TransformPluginContext._formatError (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49258:41)
+      at TransformPluginContext.error (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49253:16)
+      at normalizeUrl (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64307:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64439:39
+      at async Promise.all (index 5)
+      at async TransformPluginContext.transform (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:64366:7)
+      at async PluginContainer.transform (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:49099:18)
+      at async loadAndTransform (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:51978:27)
+      at async viteTransformMiddleware (file:///C:/Users/Sich/Documents/Experence%20Zambia/node_modules/vite/dist/node/chunks/dep-BK3b2jBa.js:62106:24)
+[2m17:13:07[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./useScrolled" from "src/ui/Navbar.tsx". Does the file exist?
+[2m17:13:10[22m [31m[1m[vite][22m[39m Pre-transform error: Failed to resolve import "./useScrolled" from "src/ui/Navbar.tsx". Does the file exist?

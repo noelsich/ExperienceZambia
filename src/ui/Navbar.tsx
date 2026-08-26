@@ -3,7 +3,7 @@ import { Compass, Menu, X } from 'lucide-react'
 import { useScrolled } from './useScrolled'
 
 const links = [
-  { href: '#marketplace', label: 'Marketplace' },
+  { href: '#marketplace', label: 'The Experience' },
   { href: '#paths', label: 'Paths' },
 ]
 
@@ -35,7 +35,7 @@ export default function Navbar() {
             </a>
           ))}
           <a href="mailto:providers@experiencezambia.example?subject=List%20my%20tourism%20agency" className="bg-[#169b62] px-5 py-3 text-xs font-black uppercase tracking-[0.16em] text-white transition hover:bg-[#127f51]">
-            List an operator
+            Email the Agency
           </a>
         </div>
 
@@ -62,7 +62,7 @@ export default function Navbar() {
             </a>
           ))}
           <a href="mailto:providers@experiencezambia.example?subject=List%20my%20tourism%20agency" onClick={() => setMenuOpen(false)} className="mt-3 block bg-[#169b62] px-4 py-4 text-center text-sm font-black uppercase tracking-[0.16em] text-white">
-            List an operator
+            Email the Agency
           </a>
         </div>
       )}

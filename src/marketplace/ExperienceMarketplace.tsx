@@ -1473,8 +1473,6 @@ const paths: ItineraryPath[] = [
   },
 ]
 
-const practicalFilters = ['Budget tier', 'Difficulty / fitness', 'Trip duration', 'Group size', '4x4 needed', 'Permit info', 'Offline friendly']
-
 export default function ExperienceMarketplace() {
   const [province, setProvince] = useState<ProvinceKey>('national')
   const [category, setCategory] = useState<CategoryKey>('wildlife')
@@ -1644,15 +1642,6 @@ export default function ExperienceMarketplace() {
                   </div>
                 </div>
 
-                <div className="border-2 border-[#ff8200] bg-white p-4 shadow-[8px_8px_0_#050505]">
-                  <p className="text-sm font-black">Practical filters</p>
-                  <p className="mt-2 text-xs font-semibold leading-5 text-zinc-500">Highlighted because they decide whether an experience is realistic to book today.</p>
-                  <div className="mt-4 grid gap-2 text-xs font-bold text-zinc-700">
-                    {practicalFilters.map((filter) => (
-                      <span key={filter} className="border border-zinc-200 bg-[#fff7ed] px-3 py-2">{filter}</span>
-                    ))}
-                  </div>
-                </div>
               </aside>
 
               <div>
@@ -1679,17 +1668,6 @@ export default function ExperienceMarketplace() {
                           <span className="whitespace-nowrap bg-[#169b62] px-2 py-1 text-xs font-black text-white">{experience.price}</span>
                         </div>
                         <p className="mt-3 text-sm font-semibold leading-6 text-zinc-600">{experience.summary}</p>
-                        <div className="mt-4 grid grid-cols-2 gap-2 text-center text-xs font-black text-zinc-700 sm:grid-cols-4">
-                          <span className="bg-stone-100 px-2 py-2">{experience.duration}</span>
-                          <span className="bg-stone-100 px-2 py-2">{experience.difficulty}</span>
-                          <span className="bg-stone-100 px-2 py-2">{experience.group}</span>
-                          <span className="bg-stone-100 px-2 py-2">Self: {experience.selfExplore}</span>
-                        </div>
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          {experience.tags.map((tag) => (
-                            <span key={tag} className="border border-zinc-200 px-2 py-1 text-xs font-bold text-zinc-500">{tag}</span>
-                          ))}
-                        </div>
                         <div className="mt-5 flex items-center justify-between gap-3 border-t border-zinc-100 pt-4">
                           <span className="text-xs font-black uppercase tracking-[0.12em] text-zinc-500">{experience.providers.length} providers</span>
                           <button
@@ -1923,6 +1901,7 @@ function buildFacts(listing: Experience | ItineraryPath): FactRow[] {
 function ContactModal({ listing, onClose }: { listing: Experience | ItineraryPath; onClose: () => void }) {
   const facts = buildFacts(listing)
   const tags = isExperience(listing) ? listing.tags : []
+  const [showMinistry, setShowMinistry] = useState(false)
 
   return (
     <div className="fixed inset-0 z-[80] overflow-y-auto bg-black/70 px-4 py-6 backdrop-blur-sm">
@@ -1998,14 +1977,138 @@ function ContactModal({ listing, onClose }: { listing: Experience | ItineraryPat
               )}
             </div>
 
-            <a
-              href="mailto:providers@experiencezambia.example?subject=List%20my%20tourism%20agency"
-              className="flex items-center justify-center gap-2 border border-zinc-300 bg-white px-4 py-3 text-center text-xs font-black uppercase tracking-[0.12em] text-zinc-950 hover:border-[#ff8200]"
+            <button
+              type="button"
+              onClick={() => setShowMinistry(true)}
+              className="flex w-full items-center justify-center gap-2 bg-[#169b62] px-4 py-3 text-center text-xs font-black uppercase tracking-[0.12em] text-white transition hover:bg-[#0f7a4c]"
             >
-              List tourism agency
-              <ExternalLink className="h-4 w-4" />
-            </a>
+              <Phone className="h-4 w-4" />
+              Call the agency
+            </button>
           </aside>
+        </div>
+      </div>
+
+      {showMinistry && <MinistryModal onClose={() => setShowMinistry(false)} />}
+    </div>
+  )
+}
+
+type OfficialContact = {
+  name: string
+  role: string
+  address?: string
+  phone?: string
+  website: string
+  websiteLabel: string
+  note: string
+  primary?: boolean
+}
+
+const officialContacts: OfficialContact[] = [
+  {
+    name: 'Zambia Tourism Agency (ZTA)',
+    role: 'Licensing & grading — start here',
+    address: 'Abacus House, Kabelenga Road, Lusaka',
+    phone: '+260 211 229087',
+    website: 'https://www.zambia.travel/zta.html',
+    websiteLabel: 'zambia.travel',
+    note: 'The statutory body that licenses and grades tourism enterprises and accommodation. Operators register here first.',
+    primary: true,
+  },
+  {
+    name: 'Ministry of Tourism',
+    role: 'Policy & oversight',
+    website: 'https://www.mot.gov.zm/',
+    websiteLabel: 'mot.gov.zm',
+    note: 'Sets tourism policy and oversees the statutory bodies. Use the ministry site’s Contact page for the current switchboard and departmental lines.',
+  },
+  {
+    name: 'National Heritage Conservation Commission',
+    role: 'Heritage sites & monuments',
+    website: 'https://www.mot.gov.zm/',
+    websiteLabel: 'Via Ministry of Tourism',
+    note: 'Permissions for filming, events, or guided access at national monuments and heritage sites.',
+  },
+  {
+    name: 'Zambia Institute for Tourism & Hospitality Studies',
+    role: 'Guide training & accreditation',
+    website: 'https://www.mot.gov.zm/',
+    websiteLabel: 'Via Ministry of Tourism',
+    note: 'Training and qualifications for guides, lodge staff, and hospitality operators.',
+  },
+]
+
+function MinistryModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-[90] overflow-y-auto bg-black/80 px-4 py-6 backdrop-blur-sm">
+      <div className="mx-auto max-w-2xl border border-white/10 bg-white text-zinc-950 shadow-2xl">
+        <div className="flex items-start justify-between gap-4 border-b border-zinc-200 p-5">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#169b62]">Official tourism bodies</p>
+            <h2 className="mt-2 text-2xl font-black">Ministry of Tourism contacts</h2>
+            <p className="mt-2 text-sm font-semibold leading-6 text-zinc-600">
+              To list a tour operation, verify a provider, or report a problem with one, go through the official channels below.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-10 w-10 flex-none items-center justify-center bg-zinc-950 text-white"
+            aria-label="Close ministry contacts"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="grid gap-3 p-5">
+          {officialContacts.map((contact) => (
+            <article
+              key={contact.name}
+              className={`p-4 ${contact.primary ? 'border-2 border-[#ff8200] bg-[#fff7ed] shadow-[6px_6px_0_#050505]' : 'border border-zinc-200 bg-white'}`}
+            >
+              <span
+                className={`px-2 py-1 text-[11px] font-black uppercase tracking-[0.12em] text-white ${
+                  contact.primary ? 'bg-[#d21034]' : 'bg-[#169b62]'
+                }`}
+              >
+                {contact.role}
+              </span>
+              <h3 className="mt-3 text-lg font-black leading-6">{contact.name}</h3>
+              <p className="mt-2 text-sm font-semibold leading-6 text-zinc-600">{contact.note}</p>
+
+              <div className="mt-4 grid gap-2 text-sm font-bold text-zinc-800">
+                {contact.address && (
+                  <div className="flex items-start gap-2 border border-zinc-200 bg-white px-3 py-2">
+                    <MapPin className="mt-0.5 h-4 w-4 flex-none text-[#d21034]" />
+                    {contact.address}
+                  </div>
+                )}
+                {contact.phone && (
+                  <a
+                    href={`tel:${contact.phone.replace(/\s/g, '')}`}
+                    className="flex items-center gap-2 border border-zinc-200 bg-white px-3 py-2 hover:border-[#ff8200]"
+                  >
+                    <Phone className="h-4 w-4 flex-none text-[#d21034]" />
+                    {contact.phone}
+                  </a>
+                )}
+                <a
+                  href={contact.website}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-2 border border-zinc-200 bg-white px-3 py-2 hover:border-[#ff8200]"
+                >
+                  <ExternalLink className="h-4 w-4 flex-none text-[#d21034]" />
+                  {contact.websiteLabel}
+                </a>
+              </div>
+            </article>
+          ))}
+
+          <p className="border-l-4 border-zinc-300 bg-stone-50 px-4 py-3 text-xs font-semibold leading-5 text-zinc-500">
+            Contact details change. Confirm the current phone numbers and office hours on the official websites before travelling to an office.
+          </p>
         </div>
       </div>
     </div>
